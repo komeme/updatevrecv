@@ -7,24 +7,27 @@ value receiver のメソッドで構造体のフィールドを更新しよう�
 
 ```go
 package main
+
 import "fmt"
 
 type Person struct {
-    Name string
-    Age int
-}
-func (p Person) SetName(name string)  {
-    p.Name = name 
+	Name string
+	Age  int
 }
 
-func main()  {
-    p := Person{
-        Name: "foo",
-        Age: 24,
-    }
-    p.SetName("bar")
-    fmt.Println(p.Name) // "foo" 
+func (p Person) SetName(name string) {
+	p.Name = name
 }
+
+func main() {
+	p := Person{
+		Name: "foo",
+		Age:  24,
+	}
+	p.SetName("bar")
+	fmt.Println(p.Name) // "foo" 
+}
+
 ```
 
 
