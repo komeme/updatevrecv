@@ -22,46 +22,47 @@ var Analyzer = &analysis.Analyzer{
 
 func run(pass *analysis.Pass) (interface{}, error) {
 	inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
-
-	targetFunc := make(map[*types.Func]bool)
-
-	nodeFilter := []ast.Node{
-		(*ast.FuncDecl)(nil),
-	}
-	inspect.Preorder(nodeFilter, func(n ast.Node) {
+	inspect.Preorder([]ast.Node{new(ast.FuncDecl)}, func(n ast.Node) {
 		switch n := n.(type) {
 		case *ast.FuncDecl:
 			obj := pass.TypesInfo.ObjectOf(n.Name).(*types.Func)
 			t := obj.Type().(*types.Signature)
 
-			// exclude function
+			// exclude non method
 			if t.Recv() == nil {
 				return
 			}
 
-			// pointer receiver は除外
+			// exclude methods with pointer receiver
 			if _, ok := under(t.Recv().Type()).(*types.Pointer); ok {
 				return
 			}
-			
+
 			ast.Inspect(n, func(node ast.Node) bool {
 				switch node := node.(type) {
 				case *ast.AssignStmt:
 					for _, lh := range node.Lhs {
 						v, ok := lh.(*ast.SelectorExpr)
-						if !ok{
+						if !ok {
 							continue
 						}
-						selection := pass.TypesInfo.Selections[v]
-						if types.Identical(selection.Recv(), t.Recv().Type()){
+
+						selection, ok := pass.TypesInfo.Selections[v]
+						if !ok {
+							continue
+						}
+
+						if _, ok := under(selection.Recv()).(*types.Pointer); ok {
+							continue
+						}
+
+						if types.Identical(selection.Recv(), t.Recv().Type()) {
 							pass.Reportf(lh.Pos(), "NG")
 						}
 					}
 				}
 				return true
 			})
-			
-			targetFunc[obj] = true
 		}
 	})
 
