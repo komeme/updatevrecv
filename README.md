@@ -16,7 +16,7 @@ type Person struct {
 }
 
 func (p Person) SetName(name string) {
-	p.Name = name
+	p.Name = name // want "field update in value receiver method"
 }
 
 func main() {

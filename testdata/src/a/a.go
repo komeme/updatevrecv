@@ -8,11 +8,11 @@ type A struct {
 }
 
 func (a A) SetA1(content string) {
-	a.a1 = content // want "NG"
+	a.a1 = content // want "field update in value receiver method"
 }
 
 func (a A) SetA2(content string) {
-	a.a2 = &content // want "NG"
+	a.a2 = &content // want "field update in value receiver method"
 }
 
 func (a *A) SetA1Ptr(content string) {

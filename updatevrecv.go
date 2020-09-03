@@ -57,7 +57,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 						}
 
 						if types.Identical(selection.Recv(), t.Recv().Type()) {
-							pass.Reportf(lh.Pos(), "NG")
+							pass.Reportf(lh.Pos(), "field update in value receiver method")
 						}
 					}
 				}
