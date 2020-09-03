@@ -18,6 +18,10 @@ type Person struct {
 func (p Person) SetName(name string) {
 	p.Name = name // want "field update in value receiver method"
 }
+func (p *Person) SetAge(age int) {
+	p.Age = age // OK
+}
+
 
 func main() {
 	p := Person{
@@ -25,7 +29,11 @@ func main() {
 		Age:  24,
 	}
 	p.SetName("bar")
-	fmt.Println(p.Name) // "foo" 
+	fmt.Println(p.Name) // "foo" not modified
+    
+    p.SetAge(100)
+    fmt.Println(p.Age) // 100
+ 
 }
 
 ```
