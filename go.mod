@@ -1,4 +1,4 @@
-module updatevrecv
+module github.com/komeme/updatevrecv
 
 go 1.15
 

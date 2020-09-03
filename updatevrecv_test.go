@@ -3,7 +3,7 @@ package updatevrecv_test
 import (
 	"testing"
 
-	"updatevrecv"
+	"github.com/komeme/updatevrecv"
 	"golang.org/x/tools/go/analysis/analysistest"
 )
 
@@ -12,4 +12,3 @@ func TestAnalyzer(t *testing.T) {
 	testdata := analysistest.TestData()
 	analysistest.Run(t, testdata, updatevrecv.Analyzer, "a")
 }
-
